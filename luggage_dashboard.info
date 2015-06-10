@@ -1,8 +1,8 @@
-name = luggage_status
+name = luggage_dashboard
 core = 7.x
 package = Luggage
 version = 7.x-0.1
-project = luggage_status
+project = luggage_dashboard
 dependencies[] = ctools
 dependencies[] = features
 dependencies[] = strongarm

@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * luggage_status.features.field_instance.inc
+ * luggage_dashboard.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function luggage_status_field_default_field_instances() {
+function luggage_dashboard_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance: 'node-site-field_site_alias'

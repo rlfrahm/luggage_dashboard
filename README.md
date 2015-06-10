@@ -1,1 +1,1 @@
-# luggage_status
+# luggage_dashboard

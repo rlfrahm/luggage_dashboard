@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * luggage_status.features.inc
+ * luggage_dashboard.features.inc
  */
 
 /**
  * Implements hook_ctools_plugin_api().
  */
-function luggage_status_ctools_plugin_api($module = NULL, $api = NULL) {
+function luggage_dashboard_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -16,7 +16,7 @@ function luggage_status_ctools_plugin_api($module = NULL, $api = NULL) {
 /**
  * Implements hook_node_info().
  */
-function luggage_status_node_info() {
+function luggage_dashboard_node_info() {
   $items = array(
     'site' => array(
       'name' => t('Site'),
