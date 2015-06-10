@@ -1,0 +1,172 @@
+<?php
+
+/**
+ * Implements hook_cron()
+ */
+function luggage_status_cron() {
+  $nodes = node_load_multiple(array(),array('type'=>'site'));
+  foreach($nodes as $index => $node) {
+    if(!isset($node->field_site_url[LANGUAGE_NONE][0]['value'])) continue;
+    if(!isset($node->field_site_status[LANGUAGE_NONE][0]['value'])) {
+      $node->field_site_status[LANGUAGE_NONE] = array(0 => array('value' => ''));
+    }
+    $thing = drupal_http_request($node->field_site_url[LANGUAGE_NONE][0]['value'] . '/files/status/status.json',array('method','GET'));
+    $node->field_site_status[LANGUAGE_NONE][0]['value'] = $thing->data;
+    node_save($node);
+  }
+}
+
+/**
+ * Implements hook_menu()
+ */
+function luggage_status_menu() {
+  $items = array();
+
+  $items['api/node'] = array(
+    'access arguments' => array('access content'),
+    'page callback' => 'luggage_status_node_api',
+    'page arguments' => array(2),
+    'delivery callback' => 'drupal_json_output',
+  );
+
+  $items['dashboard'] = array(
+    'type' => MENU_NORMAL_ITEM,
+    'title' => t('Site Statuses'),
+    'description' => 'My custom and very special page',
+    'page callback' => 'luggage_status_dashboard_page',
+    'access callback' => 'user_access',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * API callback to return nodes in JSON format
+ *
+ * @param $param
+ * @return array
+ */
+function luggage_status_node_api($param) {
+
+  // If passed param is node id
+  if ($param && is_numeric($param)) {
+    try {
+      $node = node_load($param);
+    } catch (Exception $e) {
+      return False;
+    }
+    return $node;
+  }
+  // If passed param is text value
+  elseif ($param && !is_numeric($param)) {
+    $node = node_load($param);
+//    $nodes = db_query("SELECT nid, uid, title FROM {node} n JOIN {field_data_body} b ON n.nid = b.entity_id WHERE n.title LIKE :pattern ORDER BY n.created DESC LIMIT 5", array(':pattern' => '%' . db_like($param) . '%'))->fetchAll();
+    return $node;
+  }
+  // If there is no passed param
+  else {
+//    $query = new EntityFieldQuery();
+//    $query->entityCondition('entity_type','site')
+//      ->entityCondition('bundle','node');
+//    $nodes = $query->execute();
+    $nodes = node_load_multiple(array(),array('type'=>'site'));
+//    $nodes = db_query("SELECT nid, uid, title FROM {node} n JOIN {field_data_body} b ON n.nid = b.entity_id ORDER BY n.created DESC LIMIT 10")->fetchAll();
+    return array('nodes' => array_values($nodes));
+  }
+}
+
+function _get_js() {
+  return array(
+    'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.16/angular.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.16/angular-resource.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.16/angular-route.min.js',
+//            'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.16/angular.min.js.map', // TODO: Remove on production!
+    drupal_get_path('module', 'luggage_status') . '/js/luggage_status_dashboard.js',
+  );
+}
+
+function _add_js() {
+  $arr = _get_js();
+  foreach($arr as $a) {
+    drupal_add_js($a);
+  }
+}
+
+function _get_css() {
+  return array(
+    drupal_get_path('module', 'luggage_status') . '/css/luggage_status_dashboard.css',
+  );
+}
+
+function _add_css() {
+  $arr =_get_css();
+  foreach($arr as $a) {
+    drupal_add_css($a);
+  }
+}
+
+/**
+ *
+ */
+function luggage_status_dashboard_page() {
+  $content = theme_render_template(drupal_get_path('module','luggage_status') . '/templates/dashboard.tpl.php',array());
+  _add_css();
+  _add_js();
+  return array('#markup'=>$content);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function luggage_status_theme($existing, $type, $theme, $path) {
+  return array(
+    'luggage_status_dashboard' => array(
+      'template' => 'dashboard',
+      'variables' => array(),
+      'path' => drupal_get_path('module','luggage_status') . '/templates',
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function luggage_status_block_info() {
+
+  $blocks['luggage_status_dashboard'] = array(
+    'info' => t('Node listing'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function luggage_status_block_view($delta = '') {
+
+  $block = array();
+
+  switch ($delta) {
+    case 'luggage_status_dashboard':
+      $block['subject'] = t('Sites');
+      $block['content'] = array(
+        '#theme' => 'luggage_status_dashboard',
+        '#attached' => array(
+          'js' => _get_js(),
+          'css' => _get_css(),
+        ),
+      );
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements template_preprocess_angular_listing().
+ */
+function luggage_status_preprocess_angular_listing(&$vars) {
+  // Can stay empty for now.
+}

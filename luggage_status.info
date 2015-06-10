@@ -1,0 +1,6 @@
+name = luggage_status
+core = 7.x
+package = Luggage
+version = 7.x-0.1
+project = luggage_status
+features[features_api][] = api:2
