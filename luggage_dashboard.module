@@ -6,6 +6,39 @@
 
 include_once 'luggage_dashboard.features.inc';
 
+function _update_status($node,$url) {
+  if(!isset($node->field_site_status[LANGUAGE_NONE][0]['value'])) {
+    $node->field_site_status[LANGUAGE_NONE] = array(0 => array('value' => ''));
+  }
+  $thing = drupal_http_request($url . '/files/status/status.json',array('method','GET'));
+  $node->field_site_status[LANGUAGE_NONE][0]['value'] = $thing->data;
+  node_save($node);
+  return true;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ */
+function luggage_dashboard_form_site_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['#submit'][] = 'luggage_dashboard_form_site_node_form_submit';
+}
+
+function luggage_dashboard_form_site_node_form_submit(&$form, &$form_state) {
+  $c1 = (isset($form['field_site_url'][LANGUAGE_NONE][0]['value']['#value'])
+    && isset($form_state['values']['field_site_url'][LANGUAGE_NONE][0]['value'])
+    && $form['field_site_url'][LANGUAGE_NONE][0]['value']['#value'] != $form_state['values']['field_site_url'][LANGUAGE_NONE][0]['value']);
+  $c2 = $form_state['values']['field_site_status'][LANGUAGE_NONE][0]['value'] == '';
+  $c3 = !isset($form_state['values']['field_site_status'][LANGUAGE_NONE][0]['value']);
+  if((isset($form['field_site_url'][LANGUAGE_NONE][0]['value']['#value'])
+    && isset($form_state['values']['field_site_url'][LANGUAGE_NONE][0]['value'])
+    && $form['field_site_url'][LANGUAGE_NONE][0]['value']['#value'] != $form_state['values']['field_site_url'][LANGUAGE_NONE][0]['value'])
+    || (!isset($form_state['values']['field_site_status'][LANGUAGE_NONE][0]['value'])
+    || $form_state['values']['field_site_status'][LANGUAGE_NONE][0]['value'] == '')) {
+    // Attempt to get the status from a new url
+    _update_status($form_state['node'],$form_state['values']['field_site_url'][LANGUAGE_NONE][0]['value']);
+  }
+}
+
 /**
  * Implements hook_cron()
  */
@@ -13,12 +46,7 @@ function luggage_dashboard_cron() {
   $nodes = node_load_multiple(array(),array('type'=>'site'));
   foreach($nodes as $index => $node) {
     if(!isset($node->field_site_url[LANGUAGE_NONE][0]['value'])) continue;
-    if(!isset($node->field_site_status[LANGUAGE_NONE][0]['value'])) {
-      $node->field_site_status[LANGUAGE_NONE] = array(0 => array('value' => ''));
-    }
-    $thing = drupal_http_request($node->field_site_url[LANGUAGE_NONE][0]['value'] . '/files/status/status.json',array('method','GET'));
-    $node->field_site_status[LANGUAGE_NONE][0]['value'] = $thing->data;
-    node_save($node);
+    _update_status($node,$node->field_site_url[LANGUAGE_NONE][0]['value']);
   }
 }
 
