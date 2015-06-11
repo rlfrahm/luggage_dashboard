@@ -2,8 +2,13 @@
   <div ng-view></div>
 
   <script type="text/ng-template" id="listView.html">
-    <div class="dashboard-grid-controls">
-      <input type="text" placeholder="Search.." ng-model="search">
+    <div class="dashboard-grid-controls clearfix">
+      <div class="pull-left">
+        <input type="text" placeholder="Search.." ng-model="search">
+      </div>
+      <div class="pull-right">
+        <button type="button" ng-click="goto('site/add')">+ Add Node</button>
+      </div>
     </div>
     <table class="dashboard-grid">
       <thead>
@@ -25,6 +30,33 @@
         </tr>
       </tbody>
     </table>
+  </script>
+
+  <script type="text/ng-template" id="siteAddView.html">
+    <h2>Add Site</h2>
+    <form name="form" ng-submit="addSite(form,newnode)">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" ng-model="newnode[field.field_name].field.value">
+      </div>
+      <div class="form-group" ng-repeat="field in structure">
+        <label>{{ field.label }}</label>
+        <div ng-switch="field.widget.type">
+          <div ng-switch-when="text_textfield">
+            <input type="text" ng-model="newnode[field.field_name].field.value">
+          </div>
+          <div ng-switch-when="text_textarea">
+            <textarea ng-model="newnode[field.field_name].field.value"></textarea>
+          </div>
+          <div ng-switch-when="options_select">
+            <select ng-model="newnode[field.field_name].field.value" ng-options="opt for (key,opt) in field.settings.allowed_values"></select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="submit">Add</button>
+      </div>
+    </form>
   </script>
 
   <script type="text/ng-template" id="detailView.html">

@@ -64,6 +64,13 @@ function luggage_dashboard_menu() {
     'delivery callback' => 'drupal_json_output',
   );
 
+  $items['api/node/site/structure'] = array(
+    'access arguments' => array('access content'),
+    'page callback' => 'luggage_dashboard_site_structure_api',
+    'page arguments' => array(2),
+    'delivery callback' => 'drupal_json_output',
+  );
+
   $items['dashboard'] = array(
     'type' => MENU_NORMAL_ITEM,
     'title' => t('Site Statuses'),
@@ -109,6 +116,22 @@ function luggage_dashboard_node_api($param) {
 //    $nodes = db_query("SELECT nid, uid, title FROM {node} n JOIN {field_data_body} b ON n.nid = b.entity_id ORDER BY n.created DESC LIMIT 10")->fetchAll();
     return array('nodes' => array_values($nodes));
   }
+}
+
+/**
+ * API callback to return nodes in JSON format
+ *
+ * @param $param
+ * @return array
+ */
+function luggage_dashboard_site_structure_api($param) {
+  $fields = field_info_instances('node','site');
+  foreach($fields as $index => $f) {
+    if($f['widget']['type'] == 'options_select') {
+      $fields[$index]['settings']['allowed_values'] = field_info_field($f['field_name'])['settings']['allowed_values'];
+    }
+  }
+  return array('structure' => array_values($fields));
 }
 
 function _get_js() {

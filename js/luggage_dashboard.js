@@ -8,6 +8,10 @@ angular.module('Dashboard', ['ngResource','ngRoute'])
         templateUrl: 'detailView.html',
         controller: 'DetailController'
       }).
+      when('/site/add', {
+        templateUrl: 'siteAddView.html',
+        controller: 'SiteAddController'
+      }).
       when('/', {
         templateUrl: 'listView.html',
         controller: 'ListController'
@@ -25,6 +29,13 @@ angular.module('Dashboard', ['ngResource','ngRoute'])
     'query' : {method: 'GET', isArray: false}
   });
 })
+
+// Factory for the ngResource service.
+  .factory('SiteStructure', function($resource) {
+    return $resource(Drupal.settings.basePath + 'api/node/site/structure', {}, {
+      'query' : {method: 'GET', isArray: false}
+    });
+  })
 
 .run(['$rootScope','Node',function($rootScope,Node) {
   $rootScope.data = {};
@@ -62,6 +73,16 @@ angular.module('Dashboard', ['ngResource','ngRoute'])
     $location.path('/' + nid);
   };
 
+}])
+
+.controller('SiteAddController', ['$scope', '$location', 'SiteStructure', function($scope, $location, SiteStructure) {
+  SiteStructure.query(function(res) {
+    $scope.structure = res.structure;
+  });
+
+  $scope.addSite = function() {
+
+  };
 }])
 
 .controller('DetailController', ['$scope', '$routeParams', 'Node', function($scope, $routeParams, Node) {
