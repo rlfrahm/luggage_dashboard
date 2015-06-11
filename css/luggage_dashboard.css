@@ -1,3 +1,41 @@
+.dashboard-grid thead td {
+    border: 1px solid #333;
+    font-weight: bold;
+    color: #333;
+}
+
+.dashboard-grid tbody tr.clickable {
+    cursor: pointer;
+}
+
+.dashboard-grid tbody tr.clickable:hover {
+    background-color: #f5f5f5;
+}
+
+.dashboard-grid tr:hover td {
+    background-color: transparent;
+}
+
 .dashboard-grid td {
-    border: 1px solid #ddd;
+    border: 1px solid #999;
+}
+
+.dashboard-grid td.orderby {
+    cursor: pointer;
+    position: relative;
+}
+
+.dashboard-grid td.orderby:hover {
+    background: #f5f5f5;
+}
+
+span.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed #000;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
 }

@@ -13,7 +13,7 @@ function _update_status($node,$url) {
   $thing = drupal_http_request($url . '/files/status/status.json',array('method','GET'));
   $node->field_site_status[LANGUAGE_NONE][0]['value'] = $thing->data;
   node_save($node);
-  return true;
+  return $node;
 }
 
 /**
@@ -35,7 +35,8 @@ function luggage_dashboard_form_site_node_form_submit(&$form, &$form_state) {
     || (!isset($form_state['values']['field_site_status'][LANGUAGE_NONE][0]['value'])
     || $form_state['values']['field_site_status'][LANGUAGE_NONE][0]['value'] == '')) {
     // Attempt to get the status from a new url
-    _update_status($form_state['node'],$form_state['values']['field_site_url'][LANGUAGE_NONE][0]['value']);
+    $node = _update_status($form['#node'],$form_state['values']['field_site_url'][LANGUAGE_NONE][0]['value']);
+    $form_state['values']['field_site_status'][LANGUAGE_NONE][0]['value'] = $node->field_site_status[LANGUAGE_NONE][0]['value'];
   }
 }
 
@@ -143,64 +144,9 @@ function _add_css() {
 /**
  *
  */
-function luggage_dashboard_dashboard_page() {
+function luggage_dashboard_page() {
   $content = theme_render_template(drupal_get_path('module','luggage_dashboard') . '/templates/dashboard.tpl.php',array());
   _add_css();
   _add_js();
   return array('#markup'=>$content);
-}
-
-/**
- * Implements hook_theme().
- */
-function luggage_dashboard_theme($existing, $type, $theme, $path) {
-  return array(
-    'luggage_dashboard' => array(
-      'template' => 'dashboard',
-      'variables' => array(),
-      'path' => drupal_get_path('module','luggage_dashboard') . '/templates',
-    ),
-  );
-}
-
-/**
- * Implements hook_block_info().
- */
-function luggage_dashboard_block_info() {
-
-  $blocks['luggage_dashboard'] = array(
-    'info' => t('Node listing'),
-  );
-
-  return $blocks;
-}
-
-/**
- * Implements hook_block_view().
- */
-function luggage_dashboard_block_view($delta = '') {
-
-  $block = array();
-
-  switch ($delta) {
-    case 'luggage_dashboard':
-      $block['subject'] = t('Sites');
-      $block['content'] = array(
-        '#theme' => 'luggage_dashboard',
-        '#attached' => array(
-          'js' => _get_js(),
-          'css' => _get_css(),
-        ),
-      );
-      break;
-  }
-
-  return $block;
-}
-
-/**
- * Implements template_preprocess_angular_listing().
- */
-function luggage_dashboard_preprocess_angular_listing(&$vars) {
-  // Can stay empty for now.
 }

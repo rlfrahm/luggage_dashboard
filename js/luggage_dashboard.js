@@ -46,6 +46,13 @@ angular.module('Dashboard', ['ngResource','ngRoute'])
     $scope.nodes = Node.search({param: $scope.search});
   };
 
+  $scope.sortby = function(o) {
+    if($scope.orderby && $scope.orderby.charAt(0) == '-')
+      $scope.orderby = o;
+    else
+      $scope.orderby = '-' + o;
+  };
+
   // Callback to load the node info in the modal
   $scope.open = function(nid) {
     $scope.loadedNode = Node.get({param: nid});
@@ -59,10 +66,20 @@ angular.module('Dashboard', ['ngResource','ngRoute'])
 
 .controller('DetailController', ['$scope', '$routeParams', 'Node', function($scope, $routeParams, Node) {
   // List of nodes
-  $scope.node = $scope.data.nodes.filter(function(e) {
-    return (e.nid == $routeParams.siteId);
-  })[0];
-    console.log($scope.node);
+  if(!$scope.data.nodes) {
+    $scope.$watch('data.nodes', function(nodes) {
+      if(nodes)
+        assignNode(nodes);
+    });
+  } else {
+    assignNode($scope.data.nodes);
+  }
+
+  function assignNode(nodes) {
+    $scope.node = nodes.filter(function(e) {
+      return (e.nid == $routeParams.siteId);
+    })[0];
+  }
   //Node.get({param: $routeParams.siteId},function(node) {
   //  console.log(node);
   //  $scope.node = node;
