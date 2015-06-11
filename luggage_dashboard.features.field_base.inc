@@ -31,46 +31,30 @@ function luggage_dashboard_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_site_drupal_version'
-  $field_bases['field_site_drupal_version'] = array(
+  // Exported field_base: 'field_site_head'
+  $field_bases['field_site_head'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_site_drupal_version',
+    'field_name' => 'field_site_head',
     'indexes' => array(
-      'format' => array(
-        0 => 'format',
+      'value' => array(
+        0 => 'value',
       ),
     ),
     'locked' => 0,
-    'module' => 'text',
+    'module' => 'list',
     'settings' => array(
-      'max_length' => 255,
-    ),
-    'translatable' => 0,
-    'type' => 'text',
-  );
-
-  // Exported field_base: 'field_site_luggage_version'
-  $field_bases['field_site_luggage_version'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_site_luggage_version',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
+      'allowed_values' => array(
+        'Test' => 'Test',
+        'Preview' => 'Preview',
+        'Live' => 'Live',
       ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(
-      'max_length' => 255,
+      'allowed_values_function' => '',
     ),
     'translatable' => 0,
-    'type' => 'text',
+    'type' => 'list_text',
   );
 
   // Exported field_base: 'field_site_status'

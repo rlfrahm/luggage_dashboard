@@ -15,7 +15,7 @@ function luggage_dashboard_field_default_field_instances() {
     'bundle' => 'site',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'The site alias as defined in your drush aliases.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -34,8 +34,8 @@ function luggage_dashboard_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_site_alias',
     'label' => 'Alias',
-    'placeholder' => '',
-    'required' => 0,
+    'placeholder' => 'eeob',
+    'required' => 1,
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(
@@ -77,23 +77,23 @@ function luggage_dashboard_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 41,
+      'weight' => 4,
     ),
   );
 
-  // Exported field_instance: 'node-site-field_site_drupal_version'
-  $field_instances['node-site-field_site_drupal_version'] = array(
+  // Exported field_instance: 'node-site-field_site_head'
+  $field_instances['node-site-field_site_head'] = array(
     'bundle' => 'site',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Where is the most forward deployed instance of this site? For example, if this site is deployed on live, select \'Live\'.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
+        'module' => 'list',
         'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 1,
+        'type' => 'list_default',
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -103,123 +103,18 @@ function luggage_dashboard_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_site_drupal_version',
-    'label' => 'Drupal Version',
-    'placeholder' => '',
-    'required' => 0,
+    'field_name' => 'field_site_head',
+    'label' => 'Head',
+    'required' => 1,
     'settings' => array(
-      'better_formats' => array(
-        'allowed_formats' => array(
-          'ds_code' => 'ds_code',
-          'filtered_html' => 'filtered_html',
-          'full_html' => 'full_html',
-          'plain_text' => 'plain_text',
-          'wysiwyg' => 'wysiwyg',
-        ),
-        'allowed_formats_toggle' => 0,
-        'default_order_toggle' => 0,
-        'default_order_wrapper' => array(
-          'formats' => array(
-            'ds_code' => array(
-              'weight' => 12,
-            ),
-            'filtered_html' => array(
-              'weight' => 0,
-            ),
-            'full_html' => array(
-              'weight' => 1,
-            ),
-            'plain_text' => array(
-              'weight' => 10,
-            ),
-            'wysiwyg' => array(
-              'weight' => 0,
-            ),
-          ),
-        ),
-      ),
-      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 42,
-    ),
-  );
-
-  // Exported field_instance: 'node-site-field_site_luggage_version'
-  $field_instances['node-site-field_site_luggage_version'] = array(
-    'bundle' => 'site',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 2,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_site_luggage_version',
-    'label' => 'Luggage Version',
-    'placeholder' => '',
-    'required' => 0,
-    'settings' => array(
-      'better_formats' => array(
-        'allowed_formats' => array(
-          'ds_code' => 'ds_code',
-          'filtered_html' => 'filtered_html',
-          'full_html' => 'full_html',
-          'plain_text' => 'plain_text',
-          'wysiwyg' => 'wysiwyg',
-        ),
-        'allowed_formats_toggle' => 0,
-        'default_order_toggle' => 0,
-        'default_order_wrapper' => array(
-          'formats' => array(
-            'ds_code' => array(
-              'weight' => 12,
-            ),
-            'filtered_html' => array(
-              'weight' => 0,
-            ),
-            'full_html' => array(
-              'weight' => 1,
-            ),
-            'plain_text' => array(
-              'weight' => 10,
-            ),
-            'wysiwyg' => array(
-              'weight' => 0,
-            ),
-          ),
-        ),
-      ),
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 43,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 10,
     ),
   );
 
@@ -290,7 +185,7 @@ function luggage_dashboard_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 45,
+      'weight' => 8,
     ),
   );
 
@@ -361,17 +256,18 @@ function luggage_dashboard_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 46,
+      'weight' => 9,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Alias');
-  t('Drupal Version');
-  t('Luggage Version');
+  t('Head');
   t('Status');
+  t('The site alias as defined in your drush aliases.');
   t('Url');
+  t('Where is the most forward deployed instance of this site? For example, if this site is deployed on live, select \'Live\'.');
 
   return $field_instances;
 }
