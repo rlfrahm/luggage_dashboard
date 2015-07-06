@@ -71,16 +71,32 @@ function luggage_dashboard_menu() {
     'delivery callback' => 'drupal_json_output',
   );
 
-  $items['dashboard'] = array(
+//  $items['dashboard'] = array(
+//    'type' => MENU_NORMAL_ITEM,
+//    'title' => t('Site Statuses'),
+//    'description' => 'My custom and very special page',
+//    'page callback' => 'luggage_dashboard_page',
+//    'access callback' => 'user_access',
+//    'access arguments' => array('access content'),
+//  );
+
+  $items['admin/config/dashboard/luggage_dashboard'] = array(
+    'title' => 'Luggage Dashboard',
+    'description' => 'Configuration for the site dashboard.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('luggage_dashboard_config_form'),
+    'access arguments' => array('access administrative pages'),
     'type' => MENU_NORMAL_ITEM,
-    'title' => t('Site Statuses'),
-    'description' => 'My custom and very special page',
-    'page callback' => 'luggage_dashboard_page',
-    'access callback' => 'user_access',
-    'access arguments' => array('access content'),
   );
 
   return $items;
+}
+
+/**
+ * Page callback: Luggage dashboard settings
+ */
+function luggage_dashboard_config_form($form, &$form_state) {
+//  $form['']
 }
 
 /**

@@ -25,3 +25,5 @@ features[variable][] = menu_parent_site
 features[variable][] = node_options_site
 features[variable][] = node_preview_site
 features[variable][] = node_submitted_site
+
+configure = admin/config/dashboard/luggage_dashboard
