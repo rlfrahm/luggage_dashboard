@@ -31,11 +31,11 @@ angular.module('Dashboard', ['ngResource','ngRoute'])
 })
 
 // Factory for the ngResource service.
-  .factory('SiteStructure', function($resource) {
-    return $resource(Drupal.settings.basePath + 'api/node/site/structure', {}, {
-      'query' : {method: 'GET', isArray: false}
-    });
-  })
+.factory('SiteStructure', function($resource) {
+  return $resource(Drupal.settings.basePath + 'api/node/site/structure', {}, {
+    'query' : {method: 'GET', isArray: false}
+  });
+})
 
 .run(['$rootScope','Node',function($rootScope,Node) {
   $rootScope.data = {};

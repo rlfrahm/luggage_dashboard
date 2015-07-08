@@ -10,8 +10,11 @@ function _update_status($node,$url) {
   if(!isset($node->field_site_status[LANGUAGE_NONE][0]['value'])) {
     $node->field_site_status[LANGUAGE_NONE] = array(0 => array('value' => ''));
   }
-  $thing = drupal_http_request($url . '/files/status/status.json',array('method','GET'));
-  $node->field_site_status[LANGUAGE_NONE][0]['value'] = $thing->data;
+  $query = array(
+    'token' => $node->field_site_client_token[LANGUAGE_NONE][0]['value'],
+  );
+  $result = drupal_http_request($url . '/luggage/status' . drupal_http_build_query($query));
+  $node->field_site_status[LANGUAGE_NONE][0]['value'] = $result->data;
   node_save($node);
   return $node;
 }
